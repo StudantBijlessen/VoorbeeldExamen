@@ -4,7 +4,7 @@ def main():
     kring = input('Van welke kring wil je de leden afdrukken?')
     print(f'Je hebt gekozen voor {kring}!')
     print_kring_leden(records, kring)
-    opdracht2(records)
+    aantal_leden_per_kring(records)
 
 
 def bestaat(records: list):
@@ -58,8 +58,18 @@ def print_kring_leden(records: list, kring: str):
                 out_file.write(f'{record["Naam"]} - {record["Code"]}\n')
 
 
-def opdracht2(records):
-    pass
+def aantal_leden_per_kring(records):
+    leden = dict()
+
+    for record in records:
+        kring = record['Kring']
+        if kring in leden:
+            leden[kring] += 1
+        else:
+            leden[kring] = 1
+
+    for (key, value) in leden.items():
+        print(f'{key} {value}')
 
 
 main()
