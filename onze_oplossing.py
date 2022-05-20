@@ -1,14 +1,26 @@
 def main():
-    records = leesInput('test3-voorbeeld2.txt')
+    try:
+        records = leesInput('test3-voorbeeld2.txt')
+        records = leesInput('test3-voorbeeld2.txt')
 
-    kring = input('Van welke kring wil je de leden afdrukken?')
-    print(f'Je hebt gekozen voor {kring}!')
-    print_kring_leden(records, kring)
-    aantal_leden_per_kring(records)
+        kring = input('Van welke kring wil je de leden afdrukken?')
+        print(f'Je hebt gekozen voor {kring}!')
+        print_kring_leden(records, kring)
+        aantal_leden_per_kring(records)
+
+    except Exception as e:
+        print(e)
+        print('Zorg voor de juiste input!')
 
 
-def bestaat(records: list):
-    pass
+def bestaat(records, record):
+    record_bestaat = False
+    for current_record in records:
+        for i in range(len(records)):
+            if current_record == record:
+                record_bestaat = True
+
+    return record_bestaat
 
 
 def leesInput(filename):
@@ -18,10 +30,15 @@ def leesInput(filename):
 
         records = list()
 
+        lineNr = 2
         for line in input_file.readlines():
             line = line.rstrip('\n')
 
             record_elements = line.split(';')
+
+            if len(record_elements) != len(veldnamen):
+                raise Exception(
+                    f'Lijn {lineNr}: aantal veldnamen moet {len(veldnamen)} zijn, maar is {len(record_elements)}')
 
             new_record = \
                 {
@@ -30,16 +47,14 @@ def leesInput(filename):
                     veldnamen[2]: record_elements[2]
                 }
 
-            record_bestaat = False
-            for record in records:
-                for i in range(len(records)):
-                    if record == new_record:
-                        record_bestaat = True
+            record_bestaat = bestaat(records, new_record)
 
             if not record_bestaat:
                 records.append(new_record)
             else:
                 print('Record bestaat!')
+
+            lineNr += 1
 
         return records
 
